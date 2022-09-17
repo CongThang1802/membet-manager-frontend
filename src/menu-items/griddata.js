@@ -10,7 +10,7 @@ const icons = {
 
 const griddata = {
     id: 'group-dashboard',
-    title: 'Navigation',
+    title: 'Danh Sách',
     type: 'group',
     children: [
         {
