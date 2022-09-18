@@ -505,7 +505,6 @@ export default function EnhancedTable() {
     };
 
     const showDetail = async (id) => {
-        debugger;
         try {
             var { data } = await api.get('/member/' + id);
             setMember({
@@ -517,7 +516,6 @@ export default function EnhancedTable() {
                 total_donate: data.data.total_donate,
                 address: data.data.address
             });
-            console.log(data);
             setOpenD(true);
         } catch (error) {
             console.log(error);
