@@ -49,7 +49,7 @@ const ProfileTab = ({ handleLogout }) => {
                 <ListItemIcon>
                     <LogoutOutlined />
                 </ListItemIcon>
-                <ListItemText primary="Logout" />
+                <ListItemText primary="Đăng xuất" />
             </ListItemButton>
         </List>
     );

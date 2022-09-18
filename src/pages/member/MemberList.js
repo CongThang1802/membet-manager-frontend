@@ -639,7 +639,9 @@ export default function EnhancedTable() {
                                                             color="primary"
                                                             aria-label="ViewDetail"
                                                             component="label"
-                                                            // onClick={showDetail}
+                                                            onClick={() => {
+                                                                console.log(row.member_id);
+                                                            }}
                                                         >
                                                             <FormOutlined />
                                                         </IconButton>

@@ -100,8 +100,12 @@ const Profile = () => {
                 onClick={handleToggle}
             >
                 <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
-                    <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
-                    <Typography variant="subtitle1">John Doe</Typography>
+                    <Avatar
+                        alt="profile user"
+                        src="https://banner2.cleanpng.com/20180402/ojw/kisspng-united-states-avatar-organization-information-user-avatar-5ac20804a62b58.8673620215226654766806.jpg"
+                        sx={{ width: 32, height: 32 }}
+                    />
+                    <Typography variant="subtitle1">Ho Nguyen</Typography>
                 </Stack>
             </ButtonBase>
             <Popper
@@ -142,11 +146,15 @@ const Profile = () => {
                                             <Grid container justifyContent="space-between" alignItems="center">
                                                 <Grid item>
                                                     <Stack direction="row" spacing={1.25} alignItems="center">
-                                                        <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
+                                                        <Avatar
+                                                            alt="profile user"
+                                                            src="https://banner2.cleanpng.com/20180402/ojw/kisspng-united-states-avatar-organization-information-user-avatar-5ac20804a62b58.8673620215226654766806.jpg"
+                                                            sx={{ width: 32, height: 32 }}
+                                                        />
                                                         <Stack>
-                                                            <Typography variant="h6">John Doe</Typography>
+                                                            <Typography variant="h6">Ho Nguyen</Typography>
                                                             <Typography variant="body2" color="textSecondary">
-                                                                UI/UX Designer
+                                                                Tập Đoàn Họ Nguyễn
                                                             </Typography>
                                                         </Stack>
                                                     </Stack>
@@ -176,7 +184,7 @@ const Profile = () => {
                                                                 textTransform: 'capitalize'
                                                             }}
                                                             icon={<UserOutlined style={{ marginBottom: 0, marginRight: '10px' }} />}
-                                                            label="Profile"
+                                                            label="Thông Tin"
                                                             {...a11yProps(0)}
                                                         />
                                                         {/* <Tab
