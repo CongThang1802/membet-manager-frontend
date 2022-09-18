@@ -313,11 +313,7 @@ const EnhancedTableToolbar = (props) => {
                                 <OutlinedInput
                                     size="medium"
                                     name="phone"
-                                    startAdornment={
-                                        <InputAdornment position="start">
-                                            {/* <IdcardOutlined /> */}
-                                        </InputAdornment>
-                                    }
+                                    startAdornment={<InputAdornment position="start">{/* <IdcardOutlined /> */}</InputAdornment>}
                                     onChange={handleOnChange}
                                     value={member.phone}
                                     aria-describedby="header-search-text"
@@ -334,11 +330,7 @@ const EnhancedTableToolbar = (props) => {
                                 <OutlinedInput
                                     size="medium"
                                     name="identity_card_number"
-                                    startAdornment={
-                                        <InputAdornment position="start">
-                                            {/* <PhoneOutlined /> */}
-                                        </InputAdornment>
-                                    }
+                                    startAdornment={<InputAdornment position="start">{/* <PhoneOutlined /> */}</InputAdornment>}
                                     onChange={handleOnChange}
                                     value={member.identity_card_number}
                                     aria-describedby="header-search-text"
@@ -355,11 +347,7 @@ const EnhancedTableToolbar = (props) => {
                                 <OutlinedInput
                                     size="medium"
                                     name="full_name"
-                                    startAdornment={
-                                        <InputAdornment position="start">
-                                            {/* <PhoneOutlined /> */}
-                                        </InputAdornment>
-                                    }
+                                    startAdornment={<InputAdornment position="start">{/* <PhoneOutlined /> */}</InputAdornment>}
                                     onChange={handleOnChange}
                                     value={member.full_name}
                                     aria-describedby="header-search-text"
@@ -391,11 +379,7 @@ const EnhancedTableToolbar = (props) => {
                                 <OutlinedInput
                                     size="medium"
                                     name="address"
-                                    startAdornment={
-                                        <InputAdornment position="start">
-                                            {/* <IdcardOutlined /> */}
-                                        </InputAdornment>
-                                    }
+                                    startAdornment={<InputAdornment position="start">{/* <IdcardOutlined /> */}</InputAdornment>}
                                     onChange={handleOnChange}
                                     value={member.address}
                                     aria-describedby="header-search-text"
@@ -521,7 +505,7 @@ export default function EnhancedTable() {
     };
 
     const showDetail = async (id) => {
-        debugger
+        debugger;
         try {
             var { data } = await api.get('/member/' + id);
             setMember({
@@ -532,14 +516,13 @@ export default function EnhancedTable() {
                 identity_card_number: data.data.identity_card_number,
                 total_donate: data.data.total_donate,
                 address: data.data.address
-            })
+            });
             console.log(data);
             setOpenD(true);
-            
         } catch (error) {
             console.log(error);
         }
-    }
+    };
 
     const handleCrate = async () => {
         // try {
@@ -727,11 +710,7 @@ export default function EnhancedTable() {
                                 <OutlinedInput
                                     size="medium"
                                     name="phone"
-                                    startAdornment={
-                                        <InputAdornment position="start">
-                                            {/* <IdcardOutlined /> */}
-                                        </InputAdornment>
-                                    }
+                                    startAdornment={<InputAdornment position="start">{/* <IdcardOutlined /> */}</InputAdornment>}
                                     onChange={handleOnChange}
                                     value={member.phone}
                                     aria-describedby="header-search-text"
@@ -748,11 +727,7 @@ export default function EnhancedTable() {
                                 <OutlinedInput
                                     size="medium"
                                     name="identity_card_number"
-                                    startAdornment={
-                                        <InputAdornment position="start">
-                                            {/* <PhoneOutlined /> */}
-                                        </InputAdornment>
-                                    }
+                                    startAdornment={<InputAdornment position="start">{/* <PhoneOutlined /> */}</InputAdornment>}
                                     onChange={handleOnChange}
                                     value={member.identity_card_number}
                                     aria-describedby="header-search-text"
@@ -769,11 +744,7 @@ export default function EnhancedTable() {
                                 <OutlinedInput
                                     size="medium"
                                     name="full_name"
-                                    startAdornment={
-                                        <InputAdornment position="start">
-                                            {/* <PhoneOutlined /> */}
-                                        </InputAdornment>
-                                    }
+                                    startAdornment={<InputAdornment position="start">{/* <PhoneOutlined /> */}</InputAdornment>}
                                     onChange={handleOnChange}
                                     value={member.full_name}
                                     aria-describedby="header-search-text"
@@ -805,11 +776,7 @@ export default function EnhancedTable() {
                                 <OutlinedInput
                                     size="medium"
                                     name="address"
-                                    startAdornment={
-                                        <InputAdornment position="start">
-                                            {/* <IdcardOutlined /> */}
-                                        </InputAdornment>
-                                    }
+                                    startAdornment={<InputAdornment position="start">{/* <IdcardOutlined /> */}</InputAdornment>}
                                     onChange={handleOnChange}
                                     value={member.address}
                                     aria-describedby="header-search-text"
