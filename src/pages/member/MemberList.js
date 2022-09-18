@@ -19,7 +19,7 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import { DeleteOutlined, FilterOutlined, FormOutlined, UserAddOutlined, ReloadOutlined } from '@ant-design/icons';
+import { DeleteOutlined, FilterOutlined, FormOutlined, UserAddOutlined, ReloadOutlined, QrcodeOutlined } from '@ant-design/icons';
 import { visuallyHidden } from '@mui/utils';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -31,6 +31,15 @@ import { PhoneOutlined, IdcardOutlined } from '@ant-design/icons';
 import Grid from '@mui/material/Grid';
 import { FormControl, InputAdornment, OutlinedInput, Stack, Select, MenuItem, InputLabel, Avatar } from '@mui/material';
 import api from '../../utils/api';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const theme = createTheme({
+    palette: {
+        secondary: {
+            main: '#11cb5f'
+        }
+    }
+});
 
 
 // id, member_id, full_name, phone, password, address, gender, expiry_date, identity_card_number, total_donate, status, level
@@ -94,43 +103,43 @@ const headCells = [
         id: 'member_id',
         numeric: false,
         disablePadding: true,
-        label: 'ma thanh vien'
+        label: 'Mã Thành Viên'
     },
     {
         id: 'full_name',
         numeric: false,
         disablePadding: true,
-        label: 'ho ten'
+        label: 'Họ Tên'
     },
     {
         id: 'gender',
         numeric: false,
         disablePadding: true,
-        label: 'gioi tinh'
+        label: 'Giới Tính'
     },
     {
         id: 'phone',
         numeric: false,
         disablePadding: true,
-        label: 'dien thoai'
+        label: 'Điện Thoại'
     },
     {
         id: 'total_donate',
         numeric: false,
-        disablePadding: true,
-        label: 'donet'
+        disablePadding: false,
+        label: 'Ủng Hộ'
     },
     {
         id: 'identity_card_number',
-        numeric: true,
-        disablePadding: false,
-        label: 'ma dinh danh'
+        numeric: false,
+        disablePadding: true,
+        label: 'Mã Định Danh'
     },
     {
         id: 'address',
         numeric: false,
         disablePadding: true,
-        label: 'dia chi'
+        label: 'Địa Chỉ'
     }
 ];
 
@@ -197,6 +206,43 @@ EnhancedTableHead.propTypes = {
 const EnhancedTableToolbar = (props) => {
     const { numSelected } = props;
     const [open, setOpen] = React.useState(false);
+    const [member, setMember] = React.useState({
+        member_id: "",
+        full_name: "",
+        gender: 1,
+        phone: "",
+        identity_card_number: "",
+        total_donate: 1000,
+        address: ""
+    })
+
+    const handleOnChange = (event) => {
+        const { name, value } = event.target;
+        setMember({ ...member, [name]: value });
+    }
+
+    const handleCrate = async () => {
+        try {
+            var { data } = await api.post('/member/create', member);
+            if (data.msg == 'success') {
+                setMember({
+                    member_id: "",
+                    full_name: "",
+                    gender: 1,
+                    phone: "",
+                    identity_card_number: "",
+                    total_donate: 1000,
+                    address: ""
+                }
+                );
+                setOpen(false);
+                alert("Tạo tài khoản thành công!");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -204,6 +250,11 @@ const EnhancedTableToolbar = (props) => {
     const handleClose = () => {
         setOpen(false);
     };
+
+
+    const handleRefresh = (e) => {
+        setMembers([list]);
+    }
 
     return (
         <div>
@@ -238,7 +289,7 @@ const EnhancedTableToolbar = (props) => {
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Làm mới dữ liệu">
-                            <IconButton color="primary" size="large">
+                            <IconButton color="primary" size="large" onClick={props.reFresh}>
                                 <ReloadOutlined />
                             </IconButton>
                         </Tooltip>
@@ -250,6 +301,123 @@ const EnhancedTableToolbar = (props) => {
                     </>
                 )}
             </Toolbar>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>
+                    <Typography variant="h3">Tạo Thông Tin</Typography>
+                </DialogTitle>
+                <DialogContent>
+                    <Grid xs={12} md={12} container spacing={2}>
+                        <Grid item xs={12} md={6}>
+                            <Stack spacing={1}>
+                                <InputLabel htmlFor="lastname-signup">Số điện thoại*</InputLabel>
+                                <OutlinedInput
+                                    size="medium"
+                                    name="phone"
+                                    startAdornment={
+                                        <InputAdornment position="start">
+                                            <IdcardOutlined />
+                                        </InputAdornment>
+                                    }
+                                    onChange={handleOnChange}
+                                    value={member.phone}
+                                    aria-describedby="header-search-text"
+                                    inputProps={{
+                                        'aria-label': 'weight'
+                                    }}
+                                    placeholder=""
+                                />
+                            </Stack>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <Stack spacing={1}>
+                                <InputLabel htmlFor="lastname-signup">Mã định danh*</InputLabel>
+                                <OutlinedInput
+                                    size="medium"
+                                    name="identity_card_number"
+                                    startAdornment={
+                                        <InputAdornment position="start">
+                                            <PhoneOutlined />
+                                        </InputAdornment>
+                                    }
+                                    onChange={handleOnChange}
+                                    value={member.identity_card_number}
+                                    aria-describedby="header-search-text"
+                                    inputProps={{
+                                        'aria-label': 'weight'
+                                    }}
+                                    placeholder=""
+                                />
+                            </Stack>
+                        </Grid>
+                        <Grid item xs={12} md={8}>
+                            <Stack spacing={1}>
+                                <InputLabel htmlFor="lastname-signup">Họ tên*</InputLabel>
+                                <OutlinedInput
+                                    size="medium"
+                                    name="full_name"
+                                    startAdornment={
+                                        <InputAdornment position="start">
+                                            <PhoneOutlined />
+                                        </InputAdornment>
+                                    }
+                                    onChange={handleOnChange}
+                                    value={member.full_name}
+                                    aria-describedby="header-search-text"
+                                    inputProps={{
+                                        'aria-label': 'weight'
+                                    }}
+                                    placeholder=""
+                                />
+                            </Stack>
+                        </Grid>
+                        <Grid item xs={12} md={4}>
+                            <Stack spacing={1}>
+                                <InputLabel htmlFor="lastname-signup">Giới tính*</InputLabel>
+                                <Select labelId="demo-simple-select-label" name="gender" label="Age" value={member.gender} onChange={handleOnChange}>
+                                    <MenuItem value={1}>Nam</MenuItem>
+                                    <MenuItem value={0}>Nữ</MenuItem>
+                                </Select>
+                            </Stack>
+                        </Grid>
+                        <Grid item xs={12} md={12}>
+                            <Stack spacing={1}>
+                                <InputLabel htmlFor="lastname-signup">Địa chỉ</InputLabel>
+                                <OutlinedInput
+                                    size="medium"
+                                    name="address"
+                                    startAdornment={
+                                        <InputAdornment position="start">
+                                            <IdcardOutlined />
+                                        </InputAdornment>
+                                    }
+                                    onChange={handleOnChange}
+                                    value={member.address}
+                                    aria-describedby="header-search-text"
+                                    inputProps={{
+                                        'aria-label': 'weight'
+                                    }}
+                                    placeholder=""
+                                />
+                            </Stack>
+                        </Grid>
+                        <Grid item xs={12} md={12}>
+                            <Stack spacing={1}>
+                                <input type="file" />
+                            </Stack>
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Box sx={{ mx: 'auto' }}>
+                        <Button variant="contained" color="primary" sx={{ m: 1 }} onClick={handleCrate}>
+                            Lưu
+                        </Button>
+                        <Button variant="contained" color="secondary" sx={{ m: 1 }} onClick={handleClose}>
+                            Hủy
+                        </Button>
+                    </Box>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };
@@ -266,6 +434,16 @@ export default function EnhancedTable() {
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [members, setMembers] = React.useState([]);
+    const [openD, setOpenD] = React.useState(false);
+    const [member, setMember] = React.useState({
+        member_id: "",
+        full_name: "",
+        gender: 1,
+        phone: "",
+        identity_card_number: "",
+        total_donate: 1000,
+        address: ""
+    })
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -284,12 +462,11 @@ export default function EnhancedTable() {
                 return {
                     member_id: item.member_id,
                     full_name: item.full_name,
-                    gender: item.gender,
+                    gender: item.gender == 0 ? "Nữ" : "Nam",
                     phone: item.phone,
                     identity_card_number: item.identity_card_number,
                     total_donate: item.total_donate,
                     address: item.address
-
                 }
             }
             )
@@ -301,7 +478,13 @@ export default function EnhancedTable() {
 
     }
 
-
+    const showDetail = (event) => {
+        debugger
+        var a = event.target.id;
+        if (a != "") {
+            setOpenD(true);
+        }
+    }
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
@@ -342,6 +525,41 @@ export default function EnhancedTable() {
         setDense(event.target.checked);
     };
 
+    const handleCrate = async () => {
+        // try {
+        //     var { data } = await api.post('/member/create', member);
+        //     if (data.msg == 'success') {
+        //         setMember({
+        //             member_id: "",
+        //             full_name: "",
+        //             gender: 1,
+        //             phone: "",
+        //             identity_card_number: "",
+        //             total_donate: 1000,
+        //             address: ""
+        //         }
+        //         );
+        //         setOpen(false);
+        //         alert("Tạo tài khoản thành công!");
+        //     }
+        // } catch (error) {
+        //     console.log(error);
+        // }
+    }
+
+    const handleOnChange = (event) => {
+        const { name, value } = event.target;
+        setMember({ ...member, [name]: value });
+    }
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpenD(false);
+    };
+
     const isSelected = (member_id) => selected.indexOf(member_id) !== -1;
 
     // Avoid a layout jump when reaching the last page with empty rows.
@@ -350,7 +568,10 @@ export default function EnhancedTable() {
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
-                <EnhancedTableToolbar numSelected={selected.length} />
+                <EnhancedTableToolbar numSelected={selected.length} reFresh={() => {
+                    // truyền function vào component để reload tránh bị treo
+                    setMembers([]);
+                }} />
                 <TableContainer>
                     <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'}>
                         <EnhancedTableHead
@@ -373,7 +594,7 @@ export default function EnhancedTable() {
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={(event) => handleClick(event, row.member_id)}
+                                            // onClick={(event) => handleClick(event, row.member_id)}
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
@@ -394,23 +615,35 @@ export default function EnhancedTable() {
                                             <TableCell component="th" id={labelId} scope="row" padding="none">
                                                 {row.member_id}
                                             </TableCell>
-                                            <TableCell omponent="th" scope="row" padding="none">{row.full_name}</TableCell>
+                                            <TableCell omponent="th" scope="row" padding="none">
+                                                <Typography>{row.full_name}</Typography>
+                                            </TableCell>
                                             <TableCell omponent="th" scope="row" padding="none">{row.gender}</TableCell>
                                             <TableCell omponent="th" scope="row" padding="none">{row.phone}</TableCell>
                                             <TableCell omponent="th" scope="row" padding="none">{row.total_donate}</TableCell>
                                             <TableCell omponent="th" scope="row" padding="none">{row.identity_card_number}</TableCell>
-                                            <TableCell omponent="th" scope="row" padding="none">{row.address}</TableCell>
+                                            <TableCell omponent="th" scope="row" padding="none">
+                                                <Typography>{row.address}</Typography>
+                                            </TableCell>
                                             <TableCell align="center">
-                                                <Tooltip title="Xem chi tiết">
-                                                    <IconButton color="primary" aria-label="ViewDetail" component="label">
-                                                        <FormOutlined />
-                                                    </IconButton>
-                                                </Tooltip>
-                                                <Tooltip title="Xóa">
-                                                    <IconButton color="error" aria-label="DeleteItem" component="label">
-                                                        <DeleteOutlined />
-                                                    </IconButton>
-                                                </Tooltip>
+                                                <Stack>
+                                                    <Tooltip title="Xem chi tiết">
+                                                        <IconButton name={row.member_id} color="primary" aria-label="ViewDetail" component="label" onClick={showDetail}>
+                                                            <FormOutlined />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                    <Tooltip title="Xóa">
+                                                        <IconButton name={row.member_id} color="error" aria-label="DeleteItem" component="label">
+                                                            <DeleteOutlined />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                    <Tooltip title="Xóa">
+                                                        <IconButton name={row.member_id} color="success" aria-label="DeleteItem" component="label">
+                                                            <QrcodeOutlined />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                </Stack>
+
                                             </TableCell>
                                         </TableRow>
                                     );
@@ -437,6 +670,123 @@ export default function EnhancedTable() {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
+            <Dialog open={openD} onClose={handleClose}>
+                <DialogTitle>
+                    <Typography variant="h3">Tạo Thông Tin</Typography>
+                </DialogTitle>
+                <DialogContent>
+                    <Grid xs={12} md={12} container spacing={2}>
+                        <Grid item xs={12} md={6}>
+                            <Stack spacing={1}>
+                                <InputLabel htmlFor="lastname-signup">Số điện thoại*</InputLabel>
+                                <OutlinedInput
+                                    size="medium"
+                                    name="phone"
+                                    startAdornment={
+                                        <InputAdornment position="start">
+                                            <IdcardOutlined />
+                                        </InputAdornment>
+                                    }
+                                    onChange={handleOnChange}
+                                    value={member.phone}
+                                    aria-describedby="header-search-text"
+                                    inputProps={{
+                                        'aria-label': 'weight'
+                                    }}
+                                    placeholder=""
+                                />
+                            </Stack>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <Stack spacing={1}>
+                                <InputLabel htmlFor="lastname-signup">Mã định danh*</InputLabel>
+                                <OutlinedInput
+                                    size="medium"
+                                    name="identity_card_number"
+                                    startAdornment={
+                                        <InputAdornment position="start">
+                                            <PhoneOutlined />
+                                        </InputAdornment>
+                                    }
+                                    onChange={handleOnChange}
+                                    value={member.identity_card_number}
+                                    aria-describedby="header-search-text"
+                                    inputProps={{
+                                        'aria-label': 'weight'
+                                    }}
+                                    placeholder=""
+                                />
+                            </Stack>
+                        </Grid>
+                        <Grid item xs={12} md={8}>
+                            <Stack spacing={1}>
+                                <InputLabel htmlFor="lastname-signup">Họ tên*</InputLabel>
+                                <OutlinedInput
+                                    size="medium"
+                                    name="full_name"
+                                    startAdornment={
+                                        <InputAdornment position="start">
+                                            <PhoneOutlined />
+                                        </InputAdornment>
+                                    }
+                                    onChange={handleOnChange}
+                                    value={member.full_name}
+                                    aria-describedby="header-search-text"
+                                    inputProps={{
+                                        'aria-label': 'weight'
+                                    }}
+                                    placeholder=""
+                                />
+                            </Stack>
+                        </Grid>
+                        <Grid item xs={12} md={4}>
+                            <Stack spacing={1}>
+                                <InputLabel htmlFor="lastname-signup">Giới tính*</InputLabel>
+                                <Select labelId="demo-simple-select-label" name="gender" label="Age" value={member.gender} onChange={handleOnChange}>
+                                    <MenuItem value={1}>Nam</MenuItem>
+                                    <MenuItem value={0}>Nữ</MenuItem>
+                                </Select>
+                            </Stack>
+                        </Grid>
+                        <Grid item xs={12} md={12}>
+                            <Stack spacing={1}>
+                                <InputLabel htmlFor="lastname-signup">Địa chỉ</InputLabel>
+                                <OutlinedInput
+                                    size="medium"
+                                    name="address"
+                                    startAdornment={
+                                        <InputAdornment position="start">
+                                            <IdcardOutlined />
+                                        </InputAdornment>
+                                    }
+                                    onChange={handleOnChange}
+                                    value={member.address}
+                                    aria-describedby="header-search-text"
+                                    inputProps={{
+                                        'aria-label': 'weight'
+                                    }}
+                                    placeholder=""
+                                />
+                            </Stack>
+                        </Grid>
+                        <Grid item xs={12} md={12}>
+                            <Stack spacing={1}>
+                                <input type="file" />
+                            </Stack>
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Box sx={{ mx: 'auto' }}>
+                        <Button variant="contained" color="primary" sx={{ m: 1 }} onClick={handleCrate}>
+                            Lưu
+                        </Button>
+                        <Button variant="contained" color="secondary" sx={{ m: 1 }} onClick={handleClose}>
+                            Hủy
+                        </Button>
+                    </Box>
+                </DialogActions>
+            </Dialog>
             {/* <FormControlLabel control={<Switch checked={dense} onChange={handleChangeDense} />} label="Dense padding" /> */}
         </Box>
     );
