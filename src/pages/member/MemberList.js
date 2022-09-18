@@ -315,7 +315,7 @@ const EnhancedTableToolbar = (props) => {
                                     name="phone"
                                     startAdornment={
                                         <InputAdornment position="start">
-                                            <IdcardOutlined />
+                                            {/* <IdcardOutlined /> */}
                                         </InputAdornment>
                                     }
                                     onChange={handleOnChange}
@@ -336,7 +336,7 @@ const EnhancedTableToolbar = (props) => {
                                     name="identity_card_number"
                                     startAdornment={
                                         <InputAdornment position="start">
-                                            <PhoneOutlined />
+                                            {/* <PhoneOutlined /> */}
                                         </InputAdornment>
                                     }
                                     onChange={handleOnChange}
@@ -357,7 +357,7 @@ const EnhancedTableToolbar = (props) => {
                                     name="full_name"
                                     startAdornment={
                                         <InputAdornment position="start">
-                                            <PhoneOutlined />
+                                            {/* <PhoneOutlined /> */}
                                         </InputAdornment>
                                     }
                                     onChange={handleOnChange}
@@ -393,7 +393,7 @@ const EnhancedTableToolbar = (props) => {
                                     name="address"
                                     startAdornment={
                                         <InputAdornment position="start">
-                                            <IdcardOutlined />
+                                            {/* <IdcardOutlined /> */}
                                         </InputAdornment>
                                     }
                                     onChange={handleOnChange}
@@ -729,7 +729,7 @@ export default function EnhancedTable() {
                                     name="phone"
                                     startAdornment={
                                         <InputAdornment position="start">
-                                            <IdcardOutlined />
+                                            {/* <IdcardOutlined /> */}
                                         </InputAdornment>
                                     }
                                     onChange={handleOnChange}
@@ -750,7 +750,7 @@ export default function EnhancedTable() {
                                     name="identity_card_number"
                                     startAdornment={
                                         <InputAdornment position="start">
-                                            <PhoneOutlined />
+                                            {/* <PhoneOutlined /> */}
                                         </InputAdornment>
                                     }
                                     onChange={handleOnChange}
@@ -771,7 +771,7 @@ export default function EnhancedTable() {
                                     name="full_name"
                                     startAdornment={
                                         <InputAdornment position="start">
-                                            <PhoneOutlined />
+                                            {/* <PhoneOutlined /> */}
                                         </InputAdornment>
                                     }
                                     onChange={handleOnChange}
@@ -807,7 +807,7 @@ export default function EnhancedTable() {
                                     name="address"
                                     startAdornment={
                                         <InputAdornment position="start">
-                                            <IdcardOutlined />
+                                            {/* <IdcardOutlined /> */}
                                         </InputAdornment>
                                     }
                                     onChange={handleOnChange}
