@@ -7,6 +7,8 @@ import MinimalLayout from 'layout/MinimalLayout';
 // render - login
 const AuthLogin = Loadable(lazy(() => import('pages/authentication/Login')));
 const AuthRegister = Loadable(lazy(() => import('pages/authentication/Register')));
+const PersonalProfile = Loadable(lazy(() => import('../layout/frofile/ProFile')));
+const QRCode = Loadable(lazy(() => import('../layout/frofile/Qrcode')));
 
 // ==============================|| AUTH ROUTING ||============================== //
 
@@ -21,6 +23,14 @@ const LoginRoutes = {
         {
             path: 'register',
             element: <AuthRegister />
+        },
+        {
+            path: 'profile/:member_id',
+            element: <PersonalProfile />
+        },
+        {
+            path: 'qrcode/:member_id',
+            element: <QRCode />
         }
     ]
 };

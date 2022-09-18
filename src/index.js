@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 
 // scroll bar
 import 'simplebar/src/simplebar.css';
+import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 
 // third-party
 import { Provider as ReduxProvider } from 'react-redux';
