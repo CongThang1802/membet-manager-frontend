@@ -32,6 +32,7 @@ import Grid from '@mui/material/Grid';
 import { FormControl, InputAdornment, OutlinedInput, Stack, Select, MenuItem, InputLabel, Avatar } from '@mui/material';
 import api from '../../utils/api';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Link, useLocation } from 'react-router-dom';
 
 const theme = createTheme({
     palette: {
@@ -638,7 +639,7 @@ export default function EnhancedTable() {
                                                             color="primary"
                                                             aria-label="ViewDetail"
                                                             component="label"
-                                                            onClick={showDetail}
+                                                            // onClick={showDetail}
                                                         >
                                                             <FormOutlined />
                                                         </IconButton>
@@ -658,7 +659,8 @@ export default function EnhancedTable() {
                                                             name={row.member_id}
                                                             color="success"
                                                             aria-label="DeleteItem"
-                                                            component="label"
+                                                            component={Link}
+                                                            to={`qrcode/${row.member_id}`}
                                                         >
                                                             <QrcodeOutlined />
                                                         </IconButton>
