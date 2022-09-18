@@ -17,6 +17,7 @@ const Shadow = Loadable(lazy(() => import('pages/components-overview/Shadow')));
 const AntIcons = Loadable(lazy(() => import('pages/components-overview/AntIcons')));
 const MemberList = Loadable(lazy(() => import('pages/member/index')));
 const AuthLogin = Loadable(lazy(() => import('pages/authentication/Login')));
+const PersonalProfile = Loadable(lazy(() => import('../layout/frofile/ProFile')));
 
 const firstLogin = localStorage.getItem('firstLogin');
 

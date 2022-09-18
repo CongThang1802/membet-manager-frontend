@@ -41,7 +41,6 @@ const theme = createTheme({
     }
 });
 
-
 // id, member_id, full_name, phone, password, address, gender, expiry_date, identity_card_number, total_donate, status, level
 function createData(member_id, full_name, gender, phone, identity_card_number, total_donate, address) {
     return {
@@ -207,41 +206,40 @@ const EnhancedTableToolbar = (props) => {
     const { numSelected } = props;
     const [open, setOpen] = React.useState(false);
     const [member, setMember] = React.useState({
-        member_id: "",
-        full_name: "",
+        member_id: '',
+        full_name: '',
         gender: 1,
-        phone: "",
-        identity_card_number: "",
+        phone: '',
+        identity_card_number: '',
         total_donate: 1000,
-        address: ""
-    })
+        address: ''
+    });
 
     const handleOnChange = (event) => {
         const { name, value } = event.target;
         setMember({ ...member, [name]: value });
-    }
+    };
 
     const handleCrate = async () => {
         try {
             var { data } = await api.post('/member/create', member);
             if (data.msg == 'success') {
                 setMember({
-                    member_id: "",
-                    full_name: "",
+                    member_id: '',
+                    full_name: '',
                     gender: 1,
-                    phone: "",
-                    identity_card_number: "",
+                    phone: '',
+                    identity_card_number: '',
                     total_donate: 1000,
-                    address: ""
-                }
-                );
+                    address: ''
+                });
                 setOpen(false);
-                alert("Tạo tài khoản thành công!");
+                alert('Tạo tài khoản thành công!');
             }
         } catch (error) {
             console.log(error);
         }
-    }
+    };
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -251,10 +249,9 @@ const EnhancedTableToolbar = (props) => {
         setOpen(false);
     };
 
-
     const handleRefresh = (e) => {
         setMembers([list]);
-    }
+    };
 
     return (
         <div>
@@ -272,7 +269,9 @@ const EnhancedTableToolbar = (props) => {
                         Đã chọn {numSelected} dòng
                     </Typography>
                 ) : (
-                    <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="tableTitle" component="div">Danh Sách Thành Viên</Typography>
+                    <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="tableTitle" component="div">
+                        Danh Sách Thành Viên
+                    </Typography>
                 )}
 
                 {numSelected > 0 ? (
@@ -373,7 +372,13 @@ const EnhancedTableToolbar = (props) => {
                         <Grid item xs={12} md={4}>
                             <Stack spacing={1}>
                                 <InputLabel htmlFor="lastname-signup">Giới tính*</InputLabel>
-                                <Select labelId="demo-simple-select-label" name="gender" label="Age" value={member.gender} onChange={handleOnChange}>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    name="gender"
+                                    label="Age"
+                                    value={member.gender}
+                                    onChange={handleOnChange}
+                                >
                                     <MenuItem value={1}>Nam</MenuItem>
                                     <MenuItem value={0}>Nữ</MenuItem>
                                 </Select>
@@ -436,14 +441,14 @@ export default function EnhancedTable() {
     const [members, setMembers] = React.useState([]);
     const [openD, setOpenD] = React.useState(false);
     const [member, setMember] = React.useState({
-        member_id: "",
-        full_name: "",
+        member_id: '',
+        full_name: '',
         gender: 1,
-        phone: "",
-        identity_card_number: "",
+        phone: '',
+        identity_card_number: '',
         total_donate: 1000,
-        address: ""
-    })
+        address: ''
+    });
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -458,33 +463,22 @@ export default function EnhancedTable() {
     const handleGetData = async () => {
         try {
             var { data } = await api.get('/member');
-            const list = data.data.data.map(item => {
+            const list = data.data.data.map((item) => {
                 return {
                     member_id: item.member_id,
                     full_name: item.full_name,
-                    gender: item.gender == 0 ? "Nữ" : "Nam",
+                    gender: item.gender == 0 ? 'Nữ' : 'Nam',
                     phone: item.phone,
                     identity_card_number: item.identity_card_number,
                     total_donate: item.total_donate,
                     address: item.address
-                }
-            }
-            )
+                };
+            });
             setMembers(list);
-
         } catch (error) {
             console.log(error);
         }
-
-    }
-
-    const showDetail = (event) => {
-        debugger
-        var a = event.target.id;
-        if (a != "") {
-            setOpenD(true);
-        }
-    }
+    };
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
@@ -545,12 +539,12 @@ export default function EnhancedTable() {
         // } catch (error) {
         //     console.log(error);
         // }
-    }
+    };
 
     const handleOnChange = (event) => {
         const { name, value } = event.target;
         setMember({ ...member, [name]: value });
-    }
+    };
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -568,10 +562,13 @@ export default function EnhancedTable() {
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
-                <EnhancedTableToolbar numSelected={selected.length} reFresh={() => {
-                    // truyền function vào component để reload tránh bị treo
-                    setMembers([]);
-                }} />
+                <EnhancedTableToolbar
+                    numSelected={selected.length}
+                    reFresh={() => {
+                        // truyền function vào component để reload tránh bị treo
+                        setMembers([]);
+                    }}
+                />
                 <TableContainer>
                     <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'}>
                         <EnhancedTableHead
@@ -616,34 +613,57 @@ export default function EnhancedTable() {
                                                 {row.member_id}
                                             </TableCell>
                                             <TableCell omponent="th" scope="row" padding="none">
-                                                <Typography>{row.full_name}</Typography>
+                                                {row.full_name}
                                             </TableCell>
-                                            <TableCell omponent="th" scope="row" padding="none">{row.gender}</TableCell>
-                                            <TableCell omponent="th" scope="row" padding="none">{row.phone}</TableCell>
-                                            <TableCell omponent="th" scope="row" padding="none">{row.total_donate}</TableCell>
-                                            <TableCell omponent="th" scope="row" padding="none">{row.identity_card_number}</TableCell>
                                             <TableCell omponent="th" scope="row" padding="none">
-                                                <Typography>{row.address}</Typography>
+                                                {row.gender}
+                                            </TableCell>
+                                            <TableCell omponent="th" scope="row" padding="none">
+                                                {row.phone}
+                                            </TableCell>
+                                            <TableCell omponent="th" scope="row" padding="none">
+                                                {row.total_donate}
+                                            </TableCell>
+                                            <TableCell omponent="th" scope="row" padding="none">
+                                                {row.identity_card_number}
+                                            </TableCell>
+                                            <TableCell omponent="th" scope="row" padding="none">
+                                                {row.address}
                                             </TableCell>
                                             <TableCell align="center">
                                                 <Stack>
                                                     <Tooltip title="Xem chi tiết">
-                                                        <IconButton name={row.member_id} color="primary" aria-label="ViewDetail" component="label" onClick={showDetail}>
+                                                        <IconButton
+                                                            name={row.member_id}
+                                                            color="primary"
+                                                            aria-label="ViewDetail"
+                                                            component="label"
+                                                            onClick={showDetail}
+                                                        >
                                                             <FormOutlined />
                                                         </IconButton>
                                                     </Tooltip>
                                                     <Tooltip title="Xóa">
-                                                        <IconButton name={row.member_id} color="error" aria-label="DeleteItem" component="label">
+                                                        <IconButton
+                                                            name={row.member_id}
+                                                            color="error"
+                                                            aria-label="DeleteItem"
+                                                            component="label"
+                                                        >
                                                             <DeleteOutlined />
                                                         </IconButton>
                                                     </Tooltip>
                                                     <Tooltip title="Xóa">
-                                                        <IconButton name={row.member_id} color="success" aria-label="DeleteItem" component="label">
+                                                        <IconButton
+                                                            name={row.member_id}
+                                                            color="success"
+                                                            aria-label="DeleteItem"
+                                                            component="label"
+                                                        >
                                                             <QrcodeOutlined />
                                                         </IconButton>
                                                     </Tooltip>
                                                 </Stack>
-
                                             </TableCell>
                                         </TableRow>
                                     );
@@ -742,7 +762,13 @@ export default function EnhancedTable() {
                         <Grid item xs={12} md={4}>
                             <Stack spacing={1}>
                                 <InputLabel htmlFor="lastname-signup">Giới tính*</InputLabel>
-                                <Select labelId="demo-simple-select-label" name="gender" label="Age" value={member.gender} onChange={handleOnChange}>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    name="gender"
+                                    label="Age"
+                                    value={member.gender}
+                                    onChange={handleOnChange}
+                                >
                                     <MenuItem value={1}>Nam</MenuItem>
                                     <MenuItem value={0}>Nữ</MenuItem>
                                 </Select>
