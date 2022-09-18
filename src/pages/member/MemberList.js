@@ -1,4 +1,5 @@
-import * as React from 'react';
+/* eslint-disable prettier/prettier */
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -29,31 +30,35 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { PhoneOutlined, IdcardOutlined } from '@ant-design/icons';
 import Grid from '@mui/material/Grid';
 import { FormControl, InputAdornment, OutlinedInput, Stack, Select, MenuItem, InputLabel, Avatar } from '@mui/material';
+import api from '../../utils/api';
 
-function createData(name, calories, fat, carbs, protein) {
+
+// id, member_id, full_name, phone, password, address, gender, expiry_date, identity_card_number, total_donate, status, level
+function createData(member_id, full_name, gender, phone, identity_card_number, total_donate, address) {
     return {
-        name,
-        calories,
-        fat,
-        carbs,
-        protein
+        member_id,
+        full_name,
+        gender,
+        phone,
+        identity_card_number,
+        total_donate,
+        address
     };
 }
 
 const rows = [
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Donut', 452, 25.0, 51, 4.9),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-    createData('Honeycomb', 408, 3.2, 87, 6.5),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Jelly Bean', 375, 0.0, 94, 0.0),
-    createData('KitKat', 518, 26.0, 65, 7.0),
-    createData('Lollipop', 392, 0.2, 98, 0.0),
-    createData('Marshmallow', 318, 0, 81, 2.0),
-    createData('Nougat', 360, 19.0, 9, 37.0),
-    createData('Oreo', 437, 18.0, 63, 4.0)
+    // createData('Cupcake', 'member 1', 'nam', '123456', '1111', 4.3,'address'),
+    // createData('Donut', 'member 2', 'nam', '123456', '1111', 4.9,'address'),
+    // createData('Eclair', 'member 3', 'nu', '123456', '1111', 6.0, 'address'),
+    // createData('Frozen yoghurt', 'member 4', 'nu', '123456', '1111', 4.0, 'address'),
+    // createData('Gingerbread', 'member 5', 'nam', '123456', '1111', 3.9, 'address'),
+    // createData('Honeycomb', 'member 6', 'nam', '123456', '1111', 6.5, 'address'),
+    // createData('Ice cream sandwich', 'member 7', 'nam', '123456', '1111', 4.3, 'address'),
+    // createData('Jelly Bean', 'member 8', 'nu', '123456', '1111', 0.0, 'address'),
+    // createData('KitKat', 'member 9', 'nu', '123456', '1111', 7.0, 'address'),
+    // createData('Lollipop', 'member 10', 'nu', '123456', '1111', 0.0, 'address'),
+    // createData('Marshmallow', 'member 11', 'nam', '123456', '1111', 2.0, 'address'),
+    createData('Nougat', 'member 12', 'nam', '123456', '1111', 37.0, 'address')
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -86,34 +91,46 @@ function stableSort(array, comparator) {
 
 const headCells = [
     {
-        id: 'name',
+        id: 'member_id',
         numeric: false,
         disablePadding: true,
-        label: 'Dessert (100g serving)'
+        label: 'ma thanh vien'
     },
     {
-        id: 'calories',
-        numeric: true,
-        disablePadding: false,
-        label: 'Calories'
+        id: 'full_name',
+        numeric: false,
+        disablePadding: true,
+        label: 'ho ten'
     },
     {
-        id: 'fat',
-        numeric: true,
-        disablePadding: false,
-        label: 'Fat (g)'
+        id: 'gender',
+        numeric: false,
+        disablePadding: true,
+        label: 'gioi tinh'
     },
     {
-        id: 'carbs',
-        numeric: true,
-        disablePadding: false,
-        label: 'Carbs (g)'
+        id: 'phone',
+        numeric: false,
+        disablePadding: true,
+        label: 'dien thoai'
     },
     {
-        id: 'protein',
+        id: 'total_donate',
+        numeric: false,
+        disablePadding: true,
+        label: 'donet'
+    },
+    {
+        id: 'identity_card_number',
         numeric: true,
         disablePadding: false,
-        label: 'Protein (g)'
+        label: 'ma dinh danh'
+    },
+    {
+        id: 'address',
+        numeric: false,
+        disablePadding: true,
+        label: 'dia chi'
     }
 ];
 
@@ -204,9 +221,7 @@ const EnhancedTableToolbar = (props) => {
                         Đã chọn {numSelected} dòng
                     </Typography>
                 ) : (
-                    <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="tableTitle" component="div">
-                        Danh sách dữ liệu mẫu
-                    </Typography>
+                    <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="tableTitle" component="div">Danh Sách Thành Viên</Typography>
                 )}
 
                 {numSelected > 0 ? (
@@ -217,8 +232,8 @@ const EnhancedTableToolbar = (props) => {
                     </Tooltip>
                 ) : (
                     <>
-                        <Tooltip title="Thêm dữ liệu" onClick={handleClickOpen}>
-                            <IconButton color="primary" size="large">
+                        <Tooltip title="Thêm dữ liệu">
+                            <IconButton color="primary" size="large" onClick={handleClickOpen}>
                                 <UserAddOutlined />
                             </IconButton>
                         </Tooltip>
@@ -235,134 +250,6 @@ const EnhancedTableToolbar = (props) => {
                     </>
                 )}
             </Toolbar>
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>
-                    <Typography variant="h3">Sign up</Typography>
-                </DialogTitle>
-                <DialogContent>
-                    <Grid xs={12} md={12} container spacing={2}>
-                        <Grid item xs={12} md={6}>
-                            <Stack spacing={1}>
-                                <InputLabel htmlFor="lastname-signup">Last Name*</InputLabel>
-                                <OutlinedInput
-                                    size="medium"
-                                    id="IdCard"
-                                    startAdornment={
-                                        <InputAdornment position="start">
-                                            <IdcardOutlined />
-                                        </InputAdornment>
-                                    }
-                                    aria-describedby="header-search-text"
-                                    inputProps={{
-                                        'aria-label': 'weight'
-                                    }}
-                                    placeholder="Số CCCD/ CMND"
-                                />
-                            </Stack>
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <Stack spacing={1}>
-                                <InputLabel htmlFor="lastname-signup">Last Name*</InputLabel>
-                                <OutlinedInput
-                                    size="medium"
-                                    id="Phone"
-                                    startAdornment={
-                                        <InputAdornment position="start">
-                                            <PhoneOutlined />
-                                        </InputAdornment>
-                                    }
-                                    aria-describedby="header-search-text"
-                                    inputProps={{
-                                        'aria-label': 'weight'
-                                    }}
-                                    placeholder="SDT"
-                                />
-                            </Stack>
-                        </Grid>
-                        <Grid item xs={12} md={12}>
-                            <Stack spacing={1}>
-                                <InputLabel htmlFor="lastname-signup">Last Name*</InputLabel>
-                                <OutlinedInput
-                                    size="medium"
-                                    id="Phone"
-                                    startAdornment={
-                                        <InputAdornment position="start">
-                                            <PhoneOutlined />
-                                        </InputAdornment>
-                                    }
-                                    aria-describedby="header-search-text"
-                                    inputProps={{
-                                        'aria-label': 'weight'
-                                    }}
-                                    placeholder="Full name"
-                                />
-                            </Stack>
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <Stack spacing={1}>
-                                <InputLabel htmlFor="lastname-signup">Last Name*</InputLabel>
-                                <Select labelId="demo-simple-select-label" id="demo-simple-select" label="Age">
-                                    <MenuItem value={10}>Nam</MenuItem>
-                                    <MenuItem value={20}>Nữ</MenuItem>
-                                </Select>
-                            </Stack>
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <Stack spacing={1}>
-                                <InputLabel htmlFor="lastname-signup">Last Name*</InputLabel>
-                                <OutlinedInput
-                                    size="medium"
-                                    id="IdCard"
-                                    startAdornment={
-                                        <InputAdornment position="start">
-                                            <IdcardOutlined />
-                                        </InputAdornment>
-                                    }
-                                    aria-describedby="header-search-text"
-                                    inputProps={{
-                                        'aria-label': 'weight'
-                                    }}
-                                    placeholder="cap bac"
-                                />
-                            </Stack>
-                        </Grid>
-                        <Grid item xs={12} md={12}>
-                            <Stack spacing={1}>
-                                <InputLabel htmlFor="lastname-signup">Last Name*</InputLabel>
-                                <OutlinedInput
-                                    size="medium"
-                                    id="IdCard"
-                                    startAdornment={
-                                        <InputAdornment position="start">
-                                            <IdcardOutlined />
-                                        </InputAdornment>
-                                    }
-                                    aria-describedby="header-search-text"
-                                    inputProps={{
-                                        'aria-label': 'weight'
-                                    }}
-                                    placeholder="ddia chgiu"
-                                />
-                            </Stack>
-                        </Grid>
-                        <Grid item xs={12} md={12}>
-                            <Stack spacing={1}>
-                                <input type="file" />
-                            </Stack>
-                        </Grid>
-                    </Grid>
-                </DialogContent>
-                <DialogActions>
-                    <Box sx={{ mx: 'auto' }}>
-                        <Button variant="contained" color="primary" sx={{ m: 1 }} onClick={handleClose}>
-                            Lưu
-                        </Button>
-                        <Button variant="contained" sx={{ m: 1 }} onClick={handleClose}>
-                            Hủy
-                        </Button>
-                    </Box>
-                </DialogActions>
-            </Dialog>
         </div>
     );
 };
@@ -373,11 +260,12 @@ EnhancedTableToolbar.propTypes = {
 
 export default function EnhancedTable() {
     const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('calories');
+    const [orderBy, setOrderBy] = React.useState('full_name');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [members, setMembers] = React.useState([]);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -385,21 +273,51 @@ export default function EnhancedTable() {
         setOrderBy(property);
     };
 
+    useEffect(() => {
+        handleGetData();
+    });
+
+    const handleGetData = async () => {
+        try {
+            var { data } = await api.get('/member');
+            const list = data.data.data.map(item => {
+                return {
+                    member_id: item.member_id,
+                    full_name: item.full_name,
+                    gender: item.gender,
+                    phone: item.phone,
+                    identity_card_number: item.identity_card_number,
+                    total_donate: item.total_donate,
+                    address: item.address
+
+                }
+            }
+            )
+            setMembers(list);
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
+
+
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelected = rows.map((n) => n.name);
+            const newSelected = members.map((n) => n.member_id);
             setSelected(newSelected);
             return;
         }
         setSelected([]);
     };
 
-    const handleClick = (event, name) => {
-        const selectedIndex = selected.indexOf(name);
+    const handleClick = (event, member_id) => {
+        const selectedIndex = selected.indexOf(member_id);
         let newSelected = [];
 
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
+            newSelected = newSelected.concat(selected, member_id);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
@@ -424,10 +342,10 @@ export default function EnhancedTable() {
         setDense(event.target.checked);
     };
 
-    const isSelected = (name) => selected.indexOf(name) !== -1;
+    const isSelected = (member_id) => selected.indexOf(member_id) !== -1;
 
     // Avoid a layout jump when reaching the last page with empty rows.
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - members.length) : 0;
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -441,25 +359,25 @@ export default function EnhancedTable() {
                             orderBy={orderBy}
                             onSelectAllClick={handleSelectAllClick}
                             onRequestSort={handleRequestSort}
-                            rowCount={rows.length}
+                            rowCount={members.length}
                         />
                         <TableBody>
                             {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-                            {stableSort(rows, getComparator(order, orderBy))
+                            {stableSort(members, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.name);
+                                    const isItemSelected = isSelected(row.member_id);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={(event) => handleClick(event, row.name)}
+                                            onClick={(event) => handleClick(event, row.member_id)}
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={row.name}
+                                            key={row.member_id}
                                             selected={isItemSelected}
                                         >
                                             <TableCell padding="checkbox">
@@ -474,12 +392,14 @@ export default function EnhancedTable() {
                                                 </Tooltip>
                                             </TableCell>
                                             <TableCell component="th" id={labelId} scope="row" padding="none">
-                                                {row.name}
+                                                {row.member_id}
                                             </TableCell>
-                                            <TableCell align="right">{row.calories}</TableCell>
-                                            <TableCell align="right">{row.fat}</TableCell>
-                                            <TableCell align="right">{row.carbs}</TableCell>
-                                            <TableCell align="right">{row.protein}</TableCell>
+                                            <TableCell omponent="th" scope="row" padding="none">{row.full_name}</TableCell>
+                                            <TableCell omponent="th" scope="row" padding="none">{row.gender}</TableCell>
+                                            <TableCell omponent="th" scope="row" padding="none">{row.phone}</TableCell>
+                                            <TableCell omponent="th" scope="row" padding="none">{row.total_donate}</TableCell>
+                                            <TableCell omponent="th" scope="row" padding="none">{row.identity_card_number}</TableCell>
+                                            <TableCell omponent="th" scope="row" padding="none">{row.address}</TableCell>
                                             <TableCell align="center">
                                                 <Tooltip title="Xem chi tiết">
                                                     <IconButton color="primary" aria-label="ViewDetail" component="label">
@@ -510,7 +430,7 @@ export default function EnhancedTable() {
                 <TablePagination
                     rowsPerPageOptions={[5, 10, 25, 50]}
                     component="div"
-                    count={rows.length}
+                    count={members.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
