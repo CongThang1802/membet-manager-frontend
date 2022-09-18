@@ -1,5 +1,7 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import api from '../../../utils/api';
+import * as md5 from 'md5';
 
 // material-ui
 import {
@@ -33,45 +35,69 @@ import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
 const AuthLogin = () => {
     const [checked, setChecked] = React.useState(false);
+    const navigate = useNavigate();
 
     const [showPassword, setShowPassword] = React.useState(false);
+
+    const initialState = { email: '', password: '' };
+    const [userData, setUserData] = React.useState(initialState);
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
     };
 
+    const handleChangeInput = (e) => {
+        const { name, value } = e.target;
+        setUserData({ ...userData, [name]: value });
+    };
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
+    };
+    const handleLogin = (e) => {
+        e.preventDefault();
+        api.post('auth/login', userData);
+    };
+    const handleOnSubmit = async (values, actions) => {
+        try {
+            const { data } = await api.post('auth/login', { ...values, password: md5(md5(values.password)) });
+            actions.setSubmitting(false);
+            actions.resetForm();
+            if (data.status) {
+                localStorage.setItem('firstLogin', true);
+            }
+            handleServerResponse(true, 'Logged In!');
+            navigate('/');
+        } catch (error) {
+            actions.setSubmitting(false);
+            // handleServerResponse(false, error.response.data.error);
+        }
+        const firstLogin = localStorage.getItem('firstLogin');
+        if (firstLogin) {
+            navigate('/');
+        } else {
+            navigate('/login');
+        }
     };
 
     return (
         <>
             <Formik
                 initialValues={{
-                    email: 'info@codedthemes.com',
-                    password: '123456',
+                    email: '',
+                    password: '',
                     submit: null
                 }}
                 validationSchema={Yup.object().shape({
-                    email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-                    password: Yup.string().max(255).required('Password is required')
+                    email: Yup.string().email('Email không hợp lệ').max(255).required('Email là bắt buộc'),
+                    password: Yup.string().max(255).required('Mật khẩu bắt buộc')
                 })}
-                onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                    try {
-                        setStatus({ success: false });
-                        setSubmitting(false);
-                    } catch (err) {
-                        setStatus({ success: false });
-                        setErrors({ submit: err.message });
-                        setSubmitting(false);
-                    }
-                }}
+                onSubmit={handleOnSubmit}
             >
                 {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                     <form noValidate onSubmit={handleSubmit}>
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
                                 <Stack spacing={1}>
-                                    <InputLabel htmlFor="email-login">Email Address</InputLabel>
+                                    <InputLabel htmlFor="email-login">Email</InputLabel>
                                     <OutlinedInput
                                         id="email-login"
                                         type="email"
@@ -92,7 +118,7 @@ const AuthLogin = () => {
                             </Grid>
                             <Grid item xs={12}>
                                 <Stack spacing={1}>
-                                    <InputLabel htmlFor="password-login">Password</InputLabel>
+                                    <InputLabel htmlFor="password-login">Mật Khẩu</InputLabel>
                                     <OutlinedInput
                                         fullWidth
                                         error={Boolean(touched.password && errors.password)}
@@ -137,7 +163,7 @@ const AuthLogin = () => {
                                                 size="small"
                                             />
                                         }
-                                        label={<Typography variant="h6">Keep me sign in</Typography>}
+                                        label={<Typography variant="h6">Lưu Đăng Nhập</Typography>}
                                     />
                                     {/* <Link variant="h6" component={RouterLink} to="" color="text.primary">
                                         Forgot Password?
@@ -152,15 +178,15 @@ const AuthLogin = () => {
                             <Grid item xs={12}>
                                 <AnimateButton>
                                     <Button
-                                        disableElevation
-                                        disabled={isSubmitting}
+                                        // disableElevation
+                                        // disabled={isSubmitting}
                                         fullWidth
                                         size="large"
                                         type="submit"
                                         variant="contained"
                                         color="primary"
                                     >
-                                        Login
+                                        Đăng Nhập
                                     </Button>
                                 </AnimateButton>
                             </Grid>
