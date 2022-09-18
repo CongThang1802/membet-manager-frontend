@@ -442,13 +442,13 @@ export default function EnhancedTable() {
     const [members, setMembers] = React.useState([]);
     const [openD, setOpenD] = React.useState(false);
     const [member, setMember] = React.useState({
-        member_id: '',
-        full_name: '',
+        member_id: 'a',
+        full_name: 'a',
         gender: 1,
-        phone: '',
-        identity_card_number: '',
+        phone: 'aa',
+        identity_card_number: 'aa',
         total_donate: 1000,
-        address: ''
+        address: 'aaaa'
     });
 
     const handleRequestSort = (event, property) => {
@@ -519,6 +519,27 @@ export default function EnhancedTable() {
     const handleChangeDense = (event) => {
         setDense(event.target.checked);
     };
+
+    const showDetail = async (id) => {
+        debugger
+        try {
+            var { data } = await api.get('/member/' + id);
+            setMember({
+                member_id: data.data.member_id,
+                full_name: data.data.full_name,
+                gender: data.data.gender,
+                phone: data.data.phone,
+                identity_card_number: data.data.identity_card_number,
+                total_donate: data.data.total_donate,
+                address: data.data.address
+            })
+            console.log(data);
+            setOpenD(true);
+            
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const handleCrate = async () => {
         // try {
@@ -639,7 +660,9 @@ export default function EnhancedTable() {
                                                             color="primary"
                                                             aria-label="ViewDetail"
                                                             component="label"
-                                                            // onClick={showDetail}
+                                                            onClick={() => {
+                                                                showDetail(row.member_id);
+                                                            }}
                                                         >
                                                             <FormOutlined />
                                                         </IconButton>
@@ -694,7 +717,7 @@ export default function EnhancedTable() {
             </Paper>
             <Dialog open={openD} onClose={handleClose}>
                 <DialogTitle>
-                    <Typography variant="h3">Tạo Thông Tin</Typography>
+                    <Typography variant="h3">Chi Tiết Thông Tin</Typography>
                 </DialogTitle>
                 <DialogContent>
                     <Grid xs={12} md={12} container spacing={2}>
